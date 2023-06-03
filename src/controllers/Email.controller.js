@@ -8,8 +8,8 @@ const PostEmailToken = async(req,res)=>{
     try{
         
         function token(){
-            min = Math.ceil('\0');
-            max = Math.floor('\9');
+            min = Number.MIN_SAFE_INTEGER;
+            max = Number.MAX_SAFE_INTEGER;
             return Math.floor(Math.random() * (max - min) + min)
         }
         
