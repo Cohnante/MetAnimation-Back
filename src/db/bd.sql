@@ -102,9 +102,19 @@ CREATE TABLE Teacher (
     CONSTRAINT FK_Teacher_Person FOREIGN KEY (Id_Teacher)
         REFERENCES Person (Id)
 );
+CREATE TABLE detailsCourses (
+    Id INT PRIMARY KEY AUTO_INCREMENT,
+    IdCourse INT,
+    NameCourses varchar(100),
+    DescriptionCourses varchar(200),
+    Duration varchar(45),
+    UrlVideo varchar(100),
+    CONSTRAINT fk_descripcion_courses FOREIGN KEY (IdCourse)
+        REFERENCES AllCourse(Id)
+);
 
 CREATE TABLE detailsCoursesFiles (
-    Id INT PRIMARY KEY,
+    Id INT PRIMARY KEY AUTO_INCREMENT,
     IdCourse INT,
     NameFile varchar(100),
     State int,
@@ -114,7 +124,7 @@ CREATE TABLE detailsCoursesFiles (
 );
 
 CREATE TABLE detailsCoursesLinks(
-    Id INT PRIMARY KEY,
+    Id INT PRIMARY KEY AUTO_INCREMENT,
     IdCourse INT,
     NameLink varchar(100),
     State int,
@@ -123,6 +133,18 @@ CREATE TABLE detailsCoursesLinks(
 	REFERENCES AllCourse(Id)
 );
 
+CREATE TABLE Comments(
+    Id INT PRIMARY KEY AUTO_INCREMENT,
+    IdCourse INT,
+    comments varchar(100),
+    State int,
+    PersonId int,
+    likeComments varchar(45), 
+    CONSTRAINT fk_comments_courses FOREIGN KEY (IdCourse)
+	REFERENCES AllCourse(Id) ,
+    CONSTRAINT fk_person_comments FOREIGN KEY (PersonId)
+	REFERENCES person(Id)
+);
 
 CREATE TABLE Comments (
     Id INT PRIMARY KEY,

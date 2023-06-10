@@ -65,7 +65,6 @@ async function SignUp(req,res,next){
         if(rows[0]==''){
             //constante para guardar la encryptacion de la contraseña pasada por el usuario
             const BcryptPassword = await bcrypt.hash(Password,10)
-
             if(Rol==null){
             let RolNull = 'User'
             //Cadena de sql para Guardar 
@@ -116,7 +115,7 @@ async function SignUp(req,res,next){
                     //
                     let SqlEmailToken = `insert into EmailToken(email) values ('${Email}')`
                     conexion.query(SqlEmailToken,(err,rows,fields)=>{
-                        if(err) throw err;
+                        if(err) res.status(500).json(err);
                         // Verificacion si no existe ninguna CC 
                         if(Id==undefined){
                             // Ejecucion de la cadena para guardar con los valores pasados por el usuario
