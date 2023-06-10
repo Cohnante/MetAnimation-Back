@@ -15,9 +15,6 @@ CREATE TABLE Person (
     RolAd char(100) default ''
 );
 
-select * from person;
-
-
 CREATE TABLE Company (
     Id_Company INT PRIMARY KEY auto_increment,
     NameCompany CHAR(200) DEFAULT '',
@@ -87,6 +84,8 @@ CREATE TABLE ContentCourse (
     Language char(50) not null,
     Url char not null,
     Status BOOLEAN DEFAULT TRUE,
+    ImgCourse VARCHAR(200),
+    ValueCourse VARCHAR(45),
     IdTeacher INT,
     Categoria VARCHAR(255),
     CONSTRAINT FK_Contentcourse_Course FOREIGN KEY (IdTeacher)
@@ -97,12 +96,46 @@ CREATE TABLE Teacher (
     Id_Teacher INT PRIMARY KEY,
     Experience CHAR(50) NOT NULL,
     Study CHAR(255) NOT NULL,
+    profession VARCHAR(45) not null,
     Status BOOLEAN DEFAULT TRUE,
     CursosTotales int default 0,
     CONSTRAINT FK_Teacher_Person FOREIGN KEY (Id_Teacher)
         REFERENCES Person (Id)
 );
 
+CREATE TABLE detailsCoursesFiles (
+    Id INT PRIMARY KEY,
+    IdCourse INT,
+    NameFile varchar(100),
+    State int,
+    UrlFile varchar(100),
+    CONSTRAINT fk_files_courses FOREIGN KEY (IdCourse)
+	REFERENCES AllCourse(Id)
+);
+
+CREATE TABLE detailsCoursesLinks(
+    Id INT PRIMARY KEY,
+    IdCourse INT,
+    NameLink varchar(100),
+    State int,
+    UrlLink varchar(100),
+    CONSTRAINT fk_links_courses FOREIGN KEY (IdCourse)
+	REFERENCES AllCourse(Id)
+);
+
+
+CREATE TABLE Comments (
+    Id INT PRIMARY KEY,
+    IdCourse INT,
+    comments VARCHAR(100),
+    State INT,
+    PersonId INT,
+    likeComments VARCHAR(45),
+    CONSTRAINT fk_comments_courses FOREIGN KEY (IdCourse)
+        REFERENCES AllCourse (Id),
+    CONSTRAINT fk_person_comments FOREIGN KEY (PersonId)
+        REFERENCES Person (Id)
+);
 
 /*Noticias*/
 
@@ -217,9 +250,6 @@ create table EmailToken(
     Token int
 );
 
-select * from EmailToken;
-
-
 Delimiter $$
 create procedure EmailTokenElminated (in email char(100))
 begin
@@ -307,18 +337,18 @@ end $$
 delimiter ;
 
 Delimiter $$
-create procedure UpdateTeacher(in Id_Teacher1 int ,in Experience1 char(50), in Study1 char(255))
+create procedure UpdateTeacher(in Id_Teacher1 int,in Profesion varchar(45) ,in Experience1 char(50), in Study1 char(255))
 begin
-    update Teacher set Experience=Experience1, Study=Study1 where Id_Teacher=Id_Teacher1;
+    update Teacher set profession=Profesion, Experience=Experience1, Study=Study1 where Id_Teacher=Id_Teacher1;
 end $$
 delimiter ;
 
 Delimiter $$
-create procedure AddTeacher (in Id_Teacher1 int ,in Experience1 char(50), in Study1 char(255))
+create procedure AddTeacher (in Id_Teacher1 int ,in Profesion varchar(45),in Experience1 char(50), in Study1 char(255))
 begin
 	SET FOREIGN_KEY_CHECKS=0; 
 	update Person set Rol = 'Profesor' where Id = Id_Teacher1;
-	insert into Teacher (Id_Teacher,Experience,Study) values (Id_Teacher1,Experience1,Study1);
+	insert into Teacher (Id_Teacher,profession,Experience,Study) values (Id_Teacher1,Experience1,Study1);
 end $$
 delimiter ;
 

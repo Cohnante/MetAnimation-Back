@@ -2,11 +2,10 @@ const mysql = require('mysql');
 require('dotenv').config()
 
 const conexion = mysql.createConnection({
-    host:'metanimationbd.mysql.database.azure.com',
-    user:'MetAnimation',
-    password:'152403Gian?',
-    database:'MetAnimation',
-    ssl: true
+    host:'database-metanimation.cgn3svmnigef.us-east-1.rds.amazonaws.com',
+    user:'admin',
+    password:'DIANAMOYA',
+    database:'MetAnimation'
 });
 
 conexion.connect((err)=>{

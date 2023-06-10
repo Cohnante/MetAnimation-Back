@@ -31,9 +31,9 @@ const GetIdTeacher = (req,res)=>{
 
 const AddTeacher = (req,res)=>{
     try {
-        const {Experiencia,Estudios,PersonId} = req.body
-        let sql = `call AddTeacher(?,?,?)`
-        conexion.query(sql,[PersonId,Experiencia,Estudios],(err,rows,fields)=>{
+        const {Experiencia,profesion,Estudios,PersonId} = req.body
+        let sql = `call AddTeacher(?,?,?,?)`
+        conexion.query(sql,[PersonId,profesion,Experiencia,Estudios],(err,rows,fields)=>{
             if(err)throw err
             else{
                 res.status(200).json(rows)
@@ -47,9 +47,9 @@ const AddTeacher = (req,res)=>{
 const UpdateTeacher = (req,res)=>{
     try {
         const {id} = req.params
-        const {Experiencia,Estudio} = req.body
+        const {Experiencia,profesion,Estudio} = req.body
         console.log(Experiencia,Estudio,id);
-        let sql = `call UpdateTeacher(${id},${Experiencia},'${Estudio}')`
+        let sql = `call UpdateTeacher(${id},${Experiencia},'${Estudio}','${profesion}')`
         conexion.query(sql,(err,rows,fields)=>{
             if(err)throw err
             else{
