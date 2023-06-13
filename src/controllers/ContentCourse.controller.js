@@ -16,7 +16,7 @@ const GetAllContentCourse = (req,res)  =>{
 
 const GetIdContentCourse = (req,res)=>{
   try {
-    let SelectId = `call GetIdDetailsCourse(?)`
+    let SelectId = `call GetIdDetailsCourse0(?)`
     conexion.query(SelectId,[req.params.id],(err,rows,fields)=>{
       if(err) throw err;
       else{

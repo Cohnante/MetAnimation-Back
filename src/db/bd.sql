@@ -133,19 +133,6 @@ CREATE TABLE detailsCoursesLinks(
 	REFERENCES AllCourse(Id)
 );
 
-CREATE TABLE Comments(
-    Id INT PRIMARY KEY AUTO_INCREMENT,
-    IdCourse INT,
-    comments varchar(100),
-    State int,
-    PersonId int,
-    likeComments varchar(45), 
-    CONSTRAINT fk_comments_courses FOREIGN KEY (IdCourse)
-	REFERENCES AllCourse(Id) ,
-    CONSTRAINT fk_person_comments FOREIGN KEY (PersonId)
-	REFERENCES person(Id)
-);
-
 CREATE TABLE Comments (
     Id INT PRIMARY KEY,
     IdCourse INT,
@@ -347,14 +334,15 @@ delimiter ;
 Delimiter $$
 create procedure GetTeacherId(in Id int)
 begin
-	select Teacher.*,Person.Name,Person.Email,Person.Phone from Teacher inner join Person where Teacher.Id_Teacher=Id and Person.Rol="Profesor" ;
+	select Teacher.*,Person.Name,Person.Email,Person.Phone from Teacher INNER JOIN Person 
+		where Teacher.Id_Teacher=Id and Person.Rol="Profesor" and Teacher.Id_Teacher = Person.Id group by Teacher.Id_Teacher;
 end $$
 delimiter ;
 
 Delimiter $$
 create procedure GetTeacherAll()
 begin
-	select Teacher.*,Person.Name,Person.Email,Person.Phone from Teacher inner join Person where Person.Rol="Profesor" ;
+	select Teacher.*,Person.Name,Person.Email,Person.Phone from Teacher INNER JOIN Person where Teacher.Id_Teacher=Id and Person.Rol="Profesor" and Teacher.Id_Teacher = Person.Id group by Person.Id;
 end $$
 delimiter ;
 
@@ -370,7 +358,7 @@ create procedure AddTeacher (in Id_Teacher1 int ,in Profesion varchar(45),in Exp
 begin
 	SET FOREIGN_KEY_CHECKS=0; 
 	update Person set Rol = 'Profesor' where Id = Id_Teacher1;
-	insert into Teacher (Id_Teacher,profession,Experience,Study) values (Id_Teacher1,Experience1,Study1);
+	insert into Teacher (Id_Teacher,profession,Experience,Study) values (Id_Teacher1,Profesion,Experience1,Study1);
 end $$
 delimiter ;
 
@@ -398,5 +386,19 @@ create procedure CreateCategory(NameCat char(255),in DescriptionCate char(255))
 begin
 	SET FOREIGN_KEY_CHECKS=0;
 	insert into Category (NameCategory,DescriptionCategory) values (NameCat,DescriptionCate);
+end $$
+delimiter ;
+
+Delimiter $$
+create procedure GetAllDetailsCourse()
+begin
+	select * from detailsCourses;
+end $$
+delimiter ;
+
+Delimiter $$
+create procedure GetIdDetailsCourse(in Id int)
+begin 
+	Select detailsCourses.* from detailsCourses inner join AllCourse where detailsCourses.Id=Id and detailsCourses.Id=AllCourse.Id group by detailsCourses.Id;
 end $$
 delimiter ;

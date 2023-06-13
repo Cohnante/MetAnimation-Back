@@ -4,7 +4,8 @@ const AddTeacher=async(req,res,next)=>{
   try {
     
     const AddTeacherSchema = Joi.object({
-      Experiencia:Joi.string().required(),
+      profesion:Joi.string().required(),
+      Experiencia:Joi.number().required(),
       Estudios:Joi.string().required(),
       PersonId:Joi.number().required()
     })

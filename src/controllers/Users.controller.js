@@ -62,7 +62,7 @@ async function SignUp(req,res,next){
         // si hay un error se cancela el procedimiento
         if(err) res.status(400).json({message:err});
         //Si no hay un email igual se ejecuta las siguientes cadenas
-        if(rows[0]==''){
+        if(rows[0].email==undefined){
             //constante para guardar la encryptacion de la contraseña pasada por el usuario
             const BcryptPassword = await bcrypt.hash(Password,10)
             if(Rol==null){

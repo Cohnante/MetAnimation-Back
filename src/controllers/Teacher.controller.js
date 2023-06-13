@@ -14,7 +14,7 @@ const GetAllTeacher = (req,res)=>{
     }
 }   
 
-const GetIdTeacher = (req,res)=>{
+const GetIdTeacher = (req,res)=>{ 
     try {
         const id = req.params.id
         let sql = `call GetTeacherId(?)`
