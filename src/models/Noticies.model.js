@@ -19,8 +19,8 @@ const NoticieSchema = new mongoose.Schema({
   videoURL:{
       type: String
   },
-  ImagenURL:{
-    type: String
+  Images:{
+    type: Array
   },
   PodCast:{
     type: String

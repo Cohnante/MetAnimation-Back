@@ -2,9 +2,9 @@ const conexion = require('../config/mysql.config')
 
 const GetCategoryAll = (req,res)=>{
     try {
-        let sql = 'select * from category'
+        let sql = 'select * from Category'
         conexion.query(sql,(err,rows,fields)=>{
-            if(err)throw err
+            if(err) res.status(500).json(err)
             else{
                 res.status(200).json(rows)
             }
@@ -17,7 +17,7 @@ const GetCategoryAll = (req,res)=>{
 
 const GetCategoryName = (req,res)=>{
     try {
-        let sql = `select * from category where NameCategory = '${req.params.name}'`
+        let sql = `select * from Category where NameCategory = '${req.params.name}'`
         conexion.query(sql,(err,rows,fields)=>{
             if(err)throw err;
             else{
@@ -31,7 +31,7 @@ const GetCategoryName = (req,res)=>{
 
 const GetCagoryId = (req,res)=>{
     try {
-        let sql = `select * from category where Id_Category = ${req.params.id}`
+        let sql = `select * from Category where Id_Category = ${req.params.id}`
         conexion.query(sql,(err,rows,fields)=>{
             if(err)throw err
             else{

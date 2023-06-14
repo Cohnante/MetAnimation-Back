@@ -5,7 +5,7 @@ require('dotenv').config()
 const GetNoticie =async (req,res)=>{
     try {
         const NoticieGetAll =await Noticie.find()
-        res.status(200).json({message:NoticieGetAll})
+        res.status(200).json(NoticieGetAll)
     } catch (error) {
         return res.status(500).json({error})
     }
@@ -21,8 +21,8 @@ const AddNoticie =async (req,res)=>{
             Author: req.body.Author,
             PublicationDate: req.body.PublicationDate,
             videoURL:req.body.VideoURL,
-            ImagenURL:req.body.ImagenURL,
-            PodCast:req.body.podcastURl
+            Images:req.body.Images,
+            PodCast:req.body.PodCast
         })
 
         const NoticieSave = await NewNoticie.save()
