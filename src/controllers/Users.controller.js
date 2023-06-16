@@ -78,13 +78,13 @@ async function SignUp(req,res,next){
     //Declaracion de las variables que se la pasaran a la cadena de SQL
     const {Cedula,Nombre,Apellido,Celular,Email,Password,Rol,RolAd} = req.body
     // Cadena Sql para verificar que el email no sea repetido
-    let sqlEmail = `select id,Name,email from Person where Person.email = ${Email};`;
+    let sqlEmail = `select id,Name,email from Person where Person.email = '${Email}';`;
     //ejecución de la cadena sql con la constante de Email
     conexion.query(sqlEmail,[Email], async(err,rows,fields)=>{
         // si hay un error se cancela el procedimiento
         if(err) res.status(400).json({message:err});
         //Si no hay un email igual se ejecuta las siguientes cadenas
-        if(rows[0]==''){
+        if(rows==''){
             //constante para guardar la encryptacion de la contraseña pasada por el usuario
             const BcryptPassword = await bcrypt.hash(Password,10)
             if(Rol==null){
@@ -130,7 +130,7 @@ async function SignUp(req,res,next){
             //Ejecucion de la cadena de verificacion de CC con la constante Cedula
             conexion.query(sqlId,(err,rows,fields)=>{
                 // Guardando el resultado de la ejecucion de la cadena
-                const idTemp = rows[0]
+                const idTemp = rows
                 const Id = idTemp[0]
                 // si hay un error se cancela el procedimiento
                 if(err)  res.status(400).json({message:err});
@@ -164,7 +164,7 @@ async function SignUp(req,res,next){
             //Ejecucion de la cadena de verificacion de CC con la constante Cedula
             conexion.query(sqlId,[Cedula],(err,rows,fields)=>{
                 // Guardando el resultado de la ejecucion de la cadena
-                const idTemp = rows[0]
+                const idTemp = rows
                 const Id = idTemp[0]
                 // si hay un error se cancela el procedimiento
                 if(err)  res.status(400).json({message:err});
@@ -191,7 +191,7 @@ async function SignUp(req,res,next){
             })
             }
         }
-        else if(rows[0].email=Email){
+        else{
         //si existe un Email ya existente,se le manda un error 400 
         res.status(400).json({Mesage: 'email registered'});
       }
