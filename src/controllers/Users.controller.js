@@ -78,13 +78,13 @@ async function SignUp(req,res,next){
     //Declaracion de las variables que se la pasaran a la cadena de SQL
     const {Cedula,Nombre,Apellido,Celular,Email,Password,Rol,RolAd} = req.body
     // Cadena Sql para verificar que el email no sea repetido
-    let sqlEmail = `call GetEmailUser(?)`;
+    let sqlEmail = `select id,Name,email from Person where Person.email = ${Email};`;
     //ejecución de la cadena sql con la constante de Email
     conexion.query(sqlEmail,[Email], async(err,rows,fields)=>{
         // si hay un error se cancela el procedimiento
         if(err) res.status(400).json({message:err});
         //Si no hay un email igual se ejecuta las siguientes cadenas
-        if(rows[0].email==undefined){
+        if(rows[0]==''){
             //constante para guardar la encryptacion de la contraseña pasada por el usuario
             const BcryptPassword = await bcrypt.hash(Password,10)
             if(Rol==null){
@@ -92,7 +92,7 @@ async function SignUp(req,res,next){
             //Cadena de sql para Guardar 
             let sql = `call SavePerson(?,?,?,?,?,?,?,?)`
             // Cadena Sql para verificar la CC no este repetida
-            let sqlId = `call GetIdValidacionUser(?)`
+            let sqlId = `select id from Person where Person.Id = ${Cedula};`
             //Ejecucion de la cadena de verificacion de CC con la constante Cedula
             conexion.query(sqlId,[Cedula],(err,rows,fields)=>{
                 // Guardando el resultado de la ejecucion de la cadena
@@ -126,9 +126,9 @@ async function SignUp(req,res,next){
                 //Cadena de sql para Guardar 
             let sql = `call SavePerson(?,?,?,?,?,?,?,?)`
             // Cadena Sql para verificar la CC no este repetida
-            let sqlId = `call GetIdValidacionUser(?)`
+            let sqlId = `select id from Person where Person.Id = ${Cedula};`
             //Ejecucion de la cadena de verificacion de CC con la constante Cedula
-            conexion.query(sqlId,[Cedula],(err,rows,fields)=>{
+            conexion.query(sqlId,(err,rows,fields)=>{
                 // Guardando el resultado de la ejecucion de la cadena
                 const idTemp = rows[0]
                 const Id = idTemp[0]
@@ -160,7 +160,7 @@ async function SignUp(req,res,next){
             //Cadena de sql para Guardar 
             let sql = `call SavePerson(?,?,?,?,?,?,?,?)`
             // Cadena Sql para verificar la CC no este repetida
-            let sqlId = `call GetIdValidacionUser(?)`
+            let sqlId = `select id from Person where Person.Id = ${Cedula};`
             //Ejecucion de la cadena de verificacion de CC con la constante Cedula
             conexion.query(sqlId,[Cedula],(err,rows,fields)=>{
                 // Guardando el resultado de la ejecucion de la cadena
@@ -180,7 +180,7 @@ async function SignUp(req,res,next){
                             if(err)  res.status(400).json({message:err});
                             else{
                                 // si no hubo un error se le manda el mensaje con exito
-                                res.status(201).json({status: 'Usuario Agregado'})
+                                res.status(201).json({status: 'Administrador/Moderador Agregado'})
                                 next()
                             }
                         })

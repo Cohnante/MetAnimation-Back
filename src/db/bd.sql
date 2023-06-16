@@ -102,6 +102,7 @@ CREATE TABLE Teacher (
     CONSTRAINT FK_Teacher_Person FOREIGN KEY (Id_Teacher)
         REFERENCES Person (Id)
 );
+
 CREATE TABLE detailsCourses (
     Id INT PRIMARY KEY AUTO_INCREMENT,
     IdCourse INT,
@@ -284,14 +285,6 @@ begin
 end$$
 delimiter;
 
-/*Procedimiento de validacion de email duplicado*/
-delimiter $$
-create procedure GetEmailUser(in Email char(100))
-begin  
-	select id,Name,email from Person where Person.email = Email;
-end$$
-delimiter;
-
 /*Procedimiento para guardar usuario*/
 delimiter $$
 create procedure SavePerson(in Cedula int,in Nombre Char(50),in Apellido char(50),in Celular char(30),in Email char(100),in Password char(100),in rol char(100),in rolAd char(100))
@@ -300,13 +293,6 @@ begin
 end$$
 delimiter;
 
-/*Procedimiento Validacion Id duplicado*/
-delimiter $$
-create procedure GetIdValidacionUser(in id int)
-begin  
-	select id from Person where Person.Id = id;
-end$$
-delimiter;
 
 /*Procedimiento Borrar User*/
 delimiter $$
@@ -334,15 +320,14 @@ delimiter ;
 Delimiter $$
 create procedure GetTeacherId(in Id int)
 begin
-	select Teacher.*,Person.Name,Person.Email,Person.Phone from Teacher INNER JOIN Person 
-		where Teacher.Id_Teacher=Id and Person.Rol="Profesor" and Teacher.Id_Teacher = Person.Id group by Teacher.Id_Teacher;
+	select Teacher.*,Person.Name,Person.Email,Person.Phone from Teacher inner join Person where Teacher.Id_Teacher=Id and Person.Rol="Profesor" ;
 end $$
 delimiter ;
 
 Delimiter $$
 create procedure GetTeacherAll()
 begin
-	select Teacher.*,Person.Name,Person.Email,Person.Phone from Teacher INNER JOIN Person where Teacher.Id_Teacher=Id and Person.Rol="Profesor" and Teacher.Id_Teacher = Person.Id group by Person.Id;
+	select Teacher.*,Person.Name,Person.Email,Person.Phone from Teacher inner join Person where Person.Rol="Profesor" ;
 end $$
 delimiter ;
 
@@ -358,7 +343,7 @@ create procedure AddTeacher (in Id_Teacher1 int ,in Profesion varchar(45),in Exp
 begin
 	SET FOREIGN_KEY_CHECKS=0; 
 	update Person set Rol = 'Profesor' where Id = Id_Teacher1;
-	insert into Teacher (Id_Teacher,profession,Experience,Study) values (Id_Teacher1,Profesion,Experience1,Study1);
+	insert into Teacher (Id_Teacher,profession,Experience,Study) values (Id_Teacher1,Experience1,Study1);
 end $$
 delimiter ;
 
@@ -390,15 +375,15 @@ end $$
 delimiter ;
 
 Delimiter $$
-create procedure GetAllDetailsCourse()
+create procedure GetAllDetailsCourse ()
 begin
 	select * from detailsCourses;
 end $$
 delimiter ;
 
 Delimiter $$
-create procedure GetIdDetailsCourse(in Id int)
-begin 
-	Select detailsCourses.* from detailsCourses inner join AllCourse where detailsCourses.Id=Id and detailsCourses.Id=AllCourse.Id group by detailsCourses.Id;
+create procedure GetIdDetailsCourse (in ID int)
+begin
+	select * from detailsCourses where detailsCourses.Id=ID;
 end $$
 delimiter ;
