@@ -96,7 +96,7 @@ async function SignUp(req,res,next){
             //Ejecucion de la cadena de verificacion de CC con la constante Cedula
             conexion.query(sqlId,[Cedula],(err,rows,fields)=>{
                 // Guardando el resultado de la ejecucion de la cadena
-                const idTemp = rows[0]
+                const idTemp = rows
                 const Id = idTemp[0]
                 // si hay un error se cancela el procedimiento
                 if(err)  res.status(400).json({message:err});
