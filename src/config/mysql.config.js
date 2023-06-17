@@ -1,20 +1,23 @@
 const mysql = require('mysql');
 require('dotenv').config()
 
-const conexion = mysql.createConnection({
-    host:'database-metanimation.cgn3svmnigef.us-east-1.rds.amazonaws.com',
-    user:'admin',
-    password:'DIANAMOYA',
-    database:'MetAnimation'
+var pool =  mysql.createPool({
+    connectionLimit : 10,
+    host     : 'database-metanimation.cgn3svmnigef.us-east-1.rds.amazonaws.com',
+    user     : 'admin',
+    password : 'DIANAMOYA',
+    database : 'MetAnimation',
+    debug    :  false
 });
 
-conexion.connect((err)=>{
-    if(err){
-        console.log('Ha ocurrido un error' + err)
-    }
-    else{
-        console.log('La base de datos mysql se conecto')
-    }
+pool.on('connection', function (connection) {
+    console.log('DB Connection established');
+    connection.on('error', function (err) {
+    console.error(new Date(), 'MySQL error', err.code);
+    });
+    connection.on('close', function (err) {
+    console.error(new Date(), 'MySQL close', err);
+    });
 });
 
-module.exports=conexion;
+module.exports = pool;
