@@ -5,8 +5,7 @@ const GetCourseAll = (req,res) =>{
     try {
         let sql = `call GetAllCourse();`
         conexion.query(sql, (err, rows, fields) => {
-            if (err)
-              throw err;
+            if (err) throw err;
             else {
               res.json(rows[0]);
             }
