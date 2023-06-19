@@ -72,6 +72,7 @@ function Getdetailsperosn(req,res){
     }
    
 };
+
 // Agregar Usuario
 async function SignUp(req,res,next){
   try {
@@ -156,7 +157,7 @@ async function SignUp(req,res,next){
                 })
             })
             }
-            else if(RolAd=='Administrador'|| RolAd=='Moderador'){
+            else if(RolAd=='Administrador'|| RolAd=='Moderador' ){
             //Cadena de sql para Guardar 
             let sql = `call SavePerson(?,?,?,?,?,?,?,?)`
             // Cadena Sql para verificar la CC no este repetida
@@ -202,6 +203,62 @@ async function SignUp(req,res,next){
   } 
 };
 
+// Agregar detalle de Usuario 
+async function InsertDetailsUser(req, res, next) {
+    try {
+      // Declaración del parámetro pasado por el usuario
+      const { id } = req.params;
+      // Declaración de los valores pasados para modificar por el usuario
+      const {
+        DescriptionPerson, Ocupation, telefono, Ubication, Facebook, Instagram, Youtube, Likes, Followers, Followed,
+      } = req.body;
+  
+      // Cadena SQL para actualizar los campos de la tabla DetailsPerson
+      const sql = `Insert DetailsPerson SET 
+        DescriptionPerson = ?,
+        Ocupation = ?,
+        telefono = ?,
+        Ubication = ?,
+        Facebook = ?,
+        Instagram = ?,
+        Youtube = ?,
+        Likes = ?,
+        Followers = ?,
+        Followed = ?
+        WHERE IdPerson = ?`;
+  
+      // Valores para reemplazar los marcadores de posición en la cadena SQL
+      const values = [
+        DescriptionPerson,
+        Ocupation,
+        telefono,
+        Ubication,
+        Facebook,
+        Instagram,
+        Youtube,
+        Likes,
+        Followers,
+        Followed,
+        id,
+      ];
+  
+      // Ejecución de la consulta SQL
+      conexion.query(sql, values, (err, rows, fields) => {
+        // Si hay un error, se cancela el procedimiento
+        if (err) {
+          res.status(400).json({ message: err });
+        } else {
+          // Si todo está bien, se envía una respuesta exitosa al usuario
+          res.status(201).json({ message: "User modified successfully" });
+          next();
+        }
+      });
+    } catch (error) {
+      // Si hay un error por parte del servidor se le enviará el error
+      return res.status(500).json({ error });
+    }
+  }
+  
 // Eliminar Usuario
 function DeleteUser (req,res,next){
     try {
@@ -324,6 +381,40 @@ catch (error) {
     }
 };
 
+//Modificar detalle de usuario 
+
+async function ModifyDetailsUser(req, res, next) {
+    try {
+      // Declaración del parámetro pasado por el usuario
+      const { id } = req.params;
+      // Declaración de los valores pasados para modificar por el usuario
+      const {
+        DescriptionPerson, Ocupation, telefono, Ubication, Facebook, Instagram, Youtube, Likes, Followers, Followed,
+      } = req.body;
+  
+      // Cadena SQL para actualizar los campos de la tabla DetailsPerson
+      const sql = `UPDATE DetailsPerson SET 
+        DescriptionPerson = '${DescriptionPerson}', Ocupation = '${Ocupation}', telefono = '${telefono}', Ubication = '${Ubication}',
+        Facebook = '${Facebook}', Instagram = '${Instagram}', Youtube = '${Youtube}', Likes = '${Likes}', Followers = '${Followers}',
+        Followed = '${Followed}' WHERE IdPerson = '${id}'`;
+  
+      // Ejecución de la consulta SQL
+      conexion.query(sql, (err, rows, fields) => {
+        // Si hay un error, se cancela el procedimiento
+        if (err) {
+          res.status(400).json({ message: err });
+        } else {
+          // Si todo está bien, se envía una respuesta exitosa al usuario
+          res.status(201).json({ message: "User modified successfully" });
+          next();
+        }
+      });
+    } catch (error) {
+      // Si hay un error por parte del servidor se le enviará el error
+      return res.status(500).json({ error });
+    }
+  }
+  
 // Modify Password
 async function ModifyPassword(req,res,next){
     try {
@@ -424,19 +515,19 @@ async function SignIn(req,res,next){
                                 else{
                                     
                             // Si el rol Administrativo es Administrador pasa por aca y se le manda en un json el siguiente mensaje con el token
-                            if(RolAd=='Administrador'){
+                            if (RolAd == 'Administrador') {
                                 console.log(rows);
-                                return res.status(200).json({message:"Sign in successful Administrador",Token:TokenRol,Id:rows})
-                            }
+                                return res.status(200).json({ message: "Sign in successful Administrador", Token: TokenRol, Id: rows });
+                              }
                             // Si el rol Administrativo es Moderador pasa por aca y se le manda en un json el siguiente mensaje con el token
-                            if(RolAd=='Moderator'){
+                            if(RolAd=='Moderador'){
                                 console.log(rows);
                                 return res.status(200).json({message:"Sign in successful Moderator",Token:TokenRol,Id:rows})
                             }
-                            if(Rol=='Profesor'){
+                            if (Rol == 'Profesor' || Rol == 'User' ) {
                                 console.log(rows);
-                                return res.status(200).json({message:"Sign in successful Profesor",Token:TokenTeacher,Id:rows})
-                            }
+                                return res.status(200).json({ message: "Sign in successful Profesor", Token: TokenTeacher, Id: rows });
+                              }
                             // Si no tiene ningun rol Administrativo el usuario pasa por aca y se le pasa el token normal 
                             else{
                                 console.log(rows);
@@ -470,6 +561,8 @@ module.exports = {
     SignIn,
     SignUp,
     ModifyUser,
+    ModifyDetailsUser,
     DeleteUser,
-    Getdetailsperosn
+    Getdetailsperosn,
+    InsertDetailsUser
 }
