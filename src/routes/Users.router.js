@@ -16,7 +16,6 @@ router.put('/UpdatePassword/:id',ModifyPasswordValidate,verifyTokenPassword,ProC
 router.post('/SignUp',SignUpValidate,ProCtrl.SignUp)
 router.post('/SignIn',SigninValidate,ProCtrl.SignIn)
 
-router.post('/details/:id', verifyTokenEmail, ProCtrl.InsertDetailsUser);
 
 //Example
 router.post('/Email/SolicitarCodigo',UserCtrl.PostEmailToken)

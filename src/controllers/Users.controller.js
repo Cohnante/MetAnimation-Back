@@ -204,6 +204,7 @@ async function SignUp(req,res,next){
 };
 
 // Agregar detalle de Usuario 
+/*
 async function InsertDetailsUser(req, res, next) {
     try {
       // Declaración del parámetro pasado por el usuario
@@ -258,6 +259,7 @@ async function InsertDetailsUser(req, res, next) {
       return res.status(500).json({ error });
     }
   }
+  */
   
 // Eliminar Usuario
 function DeleteUser (req,res,next){
@@ -385,35 +387,37 @@ catch (error) {
 
 async function ModifyDetailsUser(req, res, next) {
     try {
-      // Declaración del parámetro pasado por el usuario
-      const { id } = req.params;
-      // Declaración de los valores pasados para modificar por el usuario
+      const { id } = req.params; // ID del usuario
       const {
         DescriptionPerson, Ocupation, telefono, Ubication, Facebook, Instagram, Youtube, Likes, Followers, Followed,
-      } = req.body;
+      } = req.body; // Valores para modificar
   
-      // Cadena SQL para actualizar los campos de la tabla DetailsPerson
-      const sql = `UPDATE DetailsPerson SET 
-        DescriptionPerson = '${DescriptionPerson}', Ocupation = '${Ocupation}', telefono = '${telefono}', Ubication = '${Ubication}',
-        Facebook = '${Facebook}', Instagram = '${Instagram}', Youtube = '${Youtube}', Likes = '${Likes}', Followers = '${Followers}',
-        Followed = '${Followed}' WHERE IdPerson = '${id}'`;
+      // Verificar si el usuario ya tiene un registro en la tabla DetailsPerson
+      const existingUser = await DetailsPerson.findOne({ where: { userId: id } });
   
-      // Ejecución de la consulta SQL
-      conexion.query(sql, (err, rows, fields) => {
-        // Si hay un error, se cancela el procedimiento
-        if (err) {
-          res.status(400).json({ message: err });
-        } else {
-          // Si todo está bien, se envía una respuesta exitosa al usuario
-          res.status(201).json({ message: "User modified successfully" });
-          next();
-        }
-      });
+      if (existingUser) {
+        // El usuario ya tiene un registro, realizar una operación de actualización
+        await DetailsPerson.update(
+          {
+            DescriptionPerson, Ocupation, telefono, Ubication, Facebook, Instagram, Youtube, Likes, Followers, Followed,
+          },
+          { where: { userId: id } }
+        );
+      } else {
+        // El usuario no tiene un registro, realizar una operación de inserción
+        await DetailsPerson.create({
+          userId: id,
+          DescriptionPerson, Ocupation, telefono, Ubication, Facebook, Instagram, Youtube, Likes, Followers, Followed,
+        });
+      }
+  
+      res.status(201).json({ message: 'User modified successfully' });
     } catch (error) {
-      // Si hay un error por parte del servidor se le enviará el error
-      return res.status(500).json({ error });
+      console.error('Error modifying user:', error);
+      res.status(500).json({ error: 'An error occurred while modifying the user' });
     }
   }
+  
   
 // Modify Password
 async function ModifyPassword(req,res,next){
@@ -564,5 +568,5 @@ module.exports = {
     ModifyDetailsUser,
     DeleteUser,
     Getdetailsperosn,
-    InsertDetailsUser
+  //  InsertDetailsUser
 }
