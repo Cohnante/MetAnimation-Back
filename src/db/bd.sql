@@ -222,6 +222,7 @@ CREATE TABLE Comment (
         REFERENCES Briefcase (IdBriefcase)
 );
 
+
 /*Membresia*/
 
 CREATE TABLE Type (
@@ -241,6 +242,16 @@ CREATE TABLE Membreys (
 
 insert into Type values (1,'Free'),(2,'Advanced'),(3,'Premium');
 
+
+
+delete from Person where id =  1095208133;
+
+
+delete from DetailsPerson where idPerson=  1095208133;
+
+select * from DetailsPerson;
+
+select * from Person;
 /*Calificacion Cursos*/
 
 CREATE TABLE qualification (
@@ -252,6 +263,47 @@ CREATE TABLE qualification (
         REFERENCES AllCourse(Id)
 );
 
+CREATE TABLE DetailsPerson (
+    Id INT PRIMARY KEY AUTO_INCREMENT,
+    IdPerson INT,
+    DescriptionPerson varchar(500),
+    Ocupation varchar(45),
+    telefono varchar(45),
+    Ubication varchar(45),
+    Facebook varchar(45),
+	Instagram varchar(45),
+    Youtube varchar(45),
+    Likes varchar(45),
+    Followers varchar(45),
+    Followed varchar(45),
+    CONSTRAINT FK_details_Perosn FOREIGN KEY (IdPerson)
+	REFERENCES Person (Id)
+);
+
+
+CREATE TABLE ToolsPerson (
+    Id INT PRIMARY KEY AUTO_INCREMENT,
+    IdPerson INT,
+    Tools varchar(500),
+    CONSTRAINT FK_Tools_Perosn FOREIGN KEY (IdPerson)
+	REFERENCES Person (Id)
+);
+
+CREATE TABLE SoftwarePerson (
+    Id INT PRIMARY KEY AUTO_INCREMENT,
+    IdPerson INT,
+    Software varchar(500),
+    CONSTRAINT FK_Tools_Perosn FOREIGN KEY (IdPerson)
+	REFERENCES Person (Id)
+);
+
+CREATE TABLE CategoryPerson (
+    Id INT PRIMARY KEY AUTO_INCREMENT,
+    IdPerson INT,
+    IdCategory varchar(500),
+    CONSTRAINT FK_caetegory_Perosn FOREIGN KEY (IdCategory)
+	REFERENCES category (Id_Category)
+);
 
 /*Table Example*/
 
@@ -259,6 +311,7 @@ create table EmailToken(
 	Email char(100),
     Token int
 );
+
 
 Delimiter $$
 create procedure EmailTokenElminated (in email char(100))

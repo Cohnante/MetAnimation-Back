@@ -204,62 +204,54 @@ async function SignUp(req,res,next){
 };
 
 // Agregar detalle de Usuario 
-/*
 async function InsertDetailsUser(req, res, next) {
     try {
-      // Declaración del parámetro pasado por el usuario
-      const { id } = req.params;
-      // Declaración de los valores pasados para modificar por el usuario
-      const {
-        DescriptionPerson, Ocupation, telefono, Ubication, Facebook, Instagram, Youtube, Likes, Followers, Followed,
-      } = req.body;
-  
-      // Cadena SQL para actualizar los campos de la tabla DetailsPerson
-      const sql = `Insert DetailsPerson SET 
-        DescriptionPerson = ?,
-        Ocupation = ?,
-        telefono = ?,
-        Ubication = ?,
-        Facebook = ?,
-        Instagram = ?,
-        Youtube = ?,
-        Likes = ?,
-        Followers = ?,
-        Followed = ?
-        WHERE IdPerson = ?`;
-  
-      // Valores para reemplazar los marcadores de posición en la cadena SQL
-      const values = [
-        DescriptionPerson,
-        Ocupation,
-        telefono,
-        Ubication,
-        Facebook,
-        Instagram,
-        Youtube,
-        Likes,
-        Followers,
-        Followed,
-        id,
-      ];
-  
-      // Ejecución de la consulta SQL
-      conexion.query(sql, values, (err, rows, fields) => {
-        // Si hay un error, se cancela el procedimiento
-        if (err) {
-          res.status(400).json({ message: err });
-        } else {
-          // Si todo está bien, se envía una respuesta exitosa al usuario
-          res.status(201).json({ message: "User modified successfully" });
-          next();
-        }
-      });
-    } catch (error) {
+        let { id } = req.params;
+        let {DescriptionPerson, Ocupation, telefono, Ubication, Facebook, Instagram, Youtube, Likes, Followers, Followed} = req.body;
+        let SearchIdCofirmed = `select Id from Person where Id=${id} `
+        conexion.query(SearchIdCofirmed,(err,rows,fields)=>{
+            if (err) throw err;
+            if(rows.length==0){
+                res.status(500).json({'User':"No Se encuentra actualmente registrado este usuario"})
+            }else{
+                let sqlUpdate = `insert into DetailsPerson(IdPerson,DescriptionPerson, Ocupation, telefono, Ubication, Facebook, Instagram, Youtube, Likes, Followers, Followed) values ('${id}','${DescriptionPerson}','${Ocupation}','${telefono}','${Ubication}','${Facebook}','${Instagram}','${Youtube}','${Likes}','${Followers}','${Followed}')`    
+                conexion.query(sqlUpdate, (err,rows,fields)=>{
+                    if(err) throw err;
+                    else{
+                        res.status(200).json({Message:"Detalles Agregados"});
+                    }
+                })
+            }
+        })
+    }catch (error) {
       // Si hay un error por parte del servidor se le enviará el error
       return res.status(500).json({ error });
     }
-  }
-  */
+}
+
+const updateDetailsPerson = (req,res)=>{
+    try {
+        let { id } = req.params;
+        let {DescriptionPerson, Ocupation, telefono, Ubication, Facebook, Instagram, Youtube, Likes, Followers, Followed} = req.body;
+        let SearchIdCofirmed = `select Id from Person where Id=${id} `
+        conexion.query(SearchIdCofirmed,(err,rows,fields)=>{
+            if (err) throw err;
+            if(rows.length==0){
+                res.status(500).json({'User':"No Se encuentra actualmente registrado este usuario"})
+            }else{
+                let sqlUpdate = `update DetailsPerson set DescriptionPerson='${DescriptionPerson}', Ocupation='${Ocupation}', telefono='${telefono}', Ubication='${Ubication}', Facebook='${Facebook}', Instagram='${Instagram}', Youtube='${Youtube}', Likes='${Likes}', Followers='${Followers}', Followed='${Followed}' where IdPerson='${id}'`    
+                conexion.query(sqlUpdate, (err,rows,fields)=>{
+                    if(err) throw err;
+                    else{
+                        res.status(200).json({Message:"Detalles Modificados"});
+                    }
+                })
+            }
+        })
+    } catch (error) {
+      return res.status(500).json({ error });
+    }
+}
   
 // Eliminar Usuario
 function DeleteUser (req,res,next){
@@ -382,42 +374,6 @@ catch (error) {
         return res.status(500).json({error})
     }
 };
-
-//Modificar detalle de usuario 
-
-async function ModifyDetailsUser(req, res, next) {
-    try {
-      const { id } = req.params; // ID del usuario
-      const {
-        DescriptionPerson, Ocupation, telefono, Ubication, Facebook, Instagram, Youtube, Likes, Followers, Followed,
-      } = req.body; // Valores para modificar
-  
-      // Verificar si el usuario ya tiene un registro en la tabla DetailsPerson
-      const existingUser = await DetailsPerson.findOne({ where: { userId: id } });
-  
-      if (existingUser) {
-        // El usuario ya tiene un registro, realizar una operación de actualización
-        await DetailsPerson.update(
-          {
-            DescriptionPerson, Ocupation, telefono, Ubication, Facebook, Instagram, Youtube, Likes, Followers, Followed,
-          },
-          { where: { userId: id } }
-        );
-      } else {
-        // El usuario no tiene un registro, realizar una operación de inserción
-        await DetailsPerson.create({
-          userId: id,
-          DescriptionPerson, Ocupation, telefono, Ubication, Facebook, Instagram, Youtube, Likes, Followers, Followed,
-        });
-      }
-  
-      res.status(201).json({ message: 'User modified successfully' });
-    } catch (error) {
-      console.error('Error modifying user:', error);
-      res.status(500).json({ error: 'An error occurred while modifying the user' });
-    }
-  }
-  
   
 // Modify Password
 async function ModifyPassword(req,res,next){
@@ -565,8 +521,8 @@ module.exports = {
     SignIn,
     SignUp,
     ModifyUser,
-    ModifyDetailsUser,
+    InsertDetailsUser,
     DeleteUser,
     Getdetailsperosn,
-  //  InsertDetailsUser
+    updateDetailsPerson
 }
