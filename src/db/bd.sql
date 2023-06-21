@@ -77,20 +77,17 @@ CREATE TABLE Category (
         REFERENCES AllCourse(Id)
 );
 
-CREATE TABLE ContentCourse (
+CREATE TABLE ContentCourseClass (
     Id_Content INT PRIMARY KEY AUTO_INCREMENT,
-    Description CHAR(255) NOT NULL,
-    Duration CHAR(10) NOT NULL,
-    Language char(50) not null,
-    Url char not null,
+    IdDetailsCourses int NOT NULL,
+    Duration varchar(20) NOT NULL,
+    DescriptionClass varchar(50) not null,
+    Url varchar(50) not null,
     Status BOOLEAN DEFAULT TRUE,
-    ImgCourse VARCHAR(200),
-    ValueCourse VARCHAR(45),
-    IdTeacher INT,
-    Categoria VARCHAR(255),
-    CONSTRAINT FK_Contentcourse_Course FOREIGN KEY (IdTeacher)
-        REFERENCES AllCourse(Id)
+    CONSTRAINT FK_Contentcourse_Course FOREIGN KEY (IdDetailsCourses)
+        REFERENCES detailsCourses(Id)
 );
+
 
 CREATE TABLE Teacher (
     Id_Teacher INT PRIMARY KEY,
@@ -269,30 +266,23 @@ CREATE TABLE DetailsPerson (
     DescriptionPerson varchar(500),
     Ocupation varchar(45),
     telefono varchar(45),
-    Ubication varchar(45),
+    Ubication int,
     Facebook varchar(45),
 	Instagram varchar(45),
     Youtube varchar(45),
     Likes varchar(45),
     Followers varchar(45),
     Followed varchar(45),
+    ImgPerfil varchar(200),
     CONSTRAINT FK_details_Perosn FOREIGN KEY (IdPerson)
-	REFERENCES Person (Id)
+	REFERENCES Person (Id),
+    CONSTRAINT FK_City_Perosn FOREIGN KEY (Ubication)
+	REFERENCES Cities (Id_Cities)
 );
-
-
 CREATE TABLE ToolsPerson (
     Id INT PRIMARY KEY AUTO_INCREMENT,
     IdPerson INT,
-    Tools varchar(500),
-    CONSTRAINT FK_Tools_Perosn FOREIGN KEY (IdPerson)
-	REFERENCES Person (Id)
-);
-
-CREATE TABLE SoftwarePerson (
-    Id INT PRIMARY KEY AUTO_INCREMENT,
-    IdPerson INT,
-    Software varchar(500),
+    nameTools varchar(500),
     CONSTRAINT FK_Tools_Perosn FOREIGN KEY (IdPerson)
 	REFERENCES Person (Id)
 );
@@ -300,9 +290,9 @@ CREATE TABLE SoftwarePerson (
 CREATE TABLE CategoryPerson (
     Id INT PRIMARY KEY AUTO_INCREMENT,
     IdPerson INT,
-    IdCategory varchar(500),
+    IdCategory int,
     CONSTRAINT FK_caetegory_Perosn FOREIGN KEY (IdCategory)
-	REFERENCES category (Id_Category)
+	REFERENCES Category (Id_Category)
 );
 
 /*Table Example*/
@@ -337,6 +327,54 @@ begin
 	select * from Person where Person.Id=id;
 end$$
 delimiter;
+
+Delimiter $$
+create procedure GetAllDetailsCourse()
+begin
+	select * from detailsCourses;
+end $$
+delimiter ;
+
+/*Procedimiento para obtener los detalles del curso por id de curso */
+Delimiter $$
+create procedure GetIdDetailsCourse(in Id int)
+begin 
+	Select detailsCourses.* from detailsCourses inner join AllCourse where detailsCourses.Id=Id and detailsCourses.Id=AllCourse.Id group by detailsCourses.Id;
+end $$
+delimiter ;
+
+
+/*Procedimiento para obtener los detalles de curso por id de detalle */
+DELIMITER $$
+CREATE PROCEDURE GetDetailsCoursesByCourseId(IN courseId INT)
+BEGIN
+    SELECT *
+    FROM detailsCourses
+    WHERE IdCourse = courseId;
+END $$
+DELIMITER ;
+
+/*Procedimiento para obtener los archivos de curso por id */
+DELIMITER $$
+CREATE PROCEDURE GetDetailsCoursesFilesByCourseId(IN courseId INT)
+BEGIN
+    SELECT *
+    FROM detailsCoursesFiles
+    WHERE IdCourse = courseId;
+END $$
+DELIMITER ;
+
+
+/*Procedimiento para obtener los links de curso por id */
+DELIMITER $$
+CREATE PROCEDURE GetDetailsCoursesLinksByCourseId(IN courseId INT)
+BEGIN
+    SELECT *
+    FROM detailsCoursesLinks
+    WHERE IdCourse = courseId;
+END $$
+DELIMITER ;
+
 
 /*Procedimiento para guardar usuario*/
 delimiter $$

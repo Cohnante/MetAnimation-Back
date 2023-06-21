@@ -206,29 +206,40 @@ async function SignUp(req,res,next){
 // Agregar detalle de Usuario 
 async function InsertDetailsUser(req, res, next) {
     try {
-        let { id } = req.params;
-        let {DescriptionPerson, Ocupation, telefono, Ubication, Facebook, Instagram, Youtube, Likes, Followers, Followed} = req.body;
-        let SearchIdCofirmed = `select Id from Person where Id=${id} `
-        conexion.query(SearchIdCofirmed,(err,rows,fields)=>{
-            if (err) throw err;
-            if(rows.length==0){
-                res.status(500).json({'User':"No Se encuentra actualmente registrado este usuario"})
-            }else{
-                let sqlUpdate = `insert into DetailsPerson(IdPerson,DescriptionPerson, Ocupation, telefono, Ubication, Facebook, Instagram, Youtube, Likes, Followers, Followed) values ('${id}','${DescriptionPerson}','${Ocupation}','${telefono}','${Ubication}','${Facebook}','${Instagram}','${Youtube}','${Likes}','${Followers}','${Followed}')`    
-                conexion.query(sqlUpdate, (err,rows,fields)=>{
-                    if(err) throw err;
-                    else{
-                        res.status(200).json({Message:"Detalles Agregados"});
-                    }
-                })
-            }
-        })
-    }catch (error) {
-      // Si hay un error por parte del servidor se le enviará el error
-      return res.status(500).json({ error });
+        const { id } = req.params;
+        const { DescriptionPerson, Ocupation, telefono, Ubication, Facebook, Instagram, Youtube, Likes, Followers, Followed } = req.body;
+    
+        const searchIdConfirmed = `SELECT Id FROM Person WHERE Id = ${id}`;
+        conexion.query(searchIdConfirmed, (err, rows, fields) => {
+          if (err) throw err;
+          if (rows.length === 0) {
+            // El ID no existe, realizar inserción
+            const sqlInsert = `INSERT INTO DetailsPerson (IdPerson, DescriptionPerson, Ocupation, telefono, Ubication, Facebook, Instagram, Youtube, Likes, Followers, Followed) 
+                               VALUES ('${id}', '${DescriptionPerson}', '${Ocupation}', '${telefono}', '${Ubication}', '${Facebook}', '${Instagram}', '${Youtube}', '${Likes}', '${Followers}', '${Followed}')`;
+            conexion.query(sqlInsert, (err, rows, fields) => {
+              if (err) throw err;
+              else {
+                res.status(200).json({ Message: "Detalles Agregados" });
+              }
+            });
+          } else {
+            // El ID existe, realizar actualización
+            const sqlUpdate = `UPDATE DetailsPerson SET DescriptionPerson = '${DescriptionPerson}', Ocupation = '${Ocupation}', telefono = '${telefono}', 
+                               Ubication = '${Ubication}', Facebook = '${Facebook}', Instagram = '${Instagram}', Youtube = '${Youtube}', 
+                               Likes = '${Likes}', Followers = '${Followers}', Followed = '${Followed}' WHERE IdPerson = '${id}'`;
+            conexion.query(sqlUpdate, (err, rows, fields) => {
+              if (err) throw err;
+              else {
+                res.status(200).json({ Message: "Detalles Modificados" });
+              }
+            });
+          }
+        });
+      } catch (error) {
+        return res.status(500).json({ error });
+      }
     }
-}
-
+/*
 const updateDetailsPerson = (req,res)=>{
     try {
         let { id } = req.params;
@@ -251,7 +262,7 @@ const updateDetailsPerson = (req,res)=>{
     } catch (error) {
       return res.status(500).json({ error });
     }
-}
+}*/
   
 // Eliminar Usuario
 function DeleteUser (req,res,next){
@@ -524,5 +535,5 @@ module.exports = {
     InsertDetailsUser,
     DeleteUser,
     Getdetailsperosn,
-    updateDetailsPerson
+  //  updateDetailsPerson
 }

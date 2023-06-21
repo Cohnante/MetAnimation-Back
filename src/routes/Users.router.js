@@ -7,7 +7,7 @@ const UserCtrl = require('../controllers/Email.controller')
 router.get('/',ProCtrl.GetAll)
 router.get('/:id', ProCtrl.Get);
 router.get('/details/:id', ProCtrl.Getdetailsperosn);
-router.put('/UpdateDetails/:id',ProCtrl.updateDetailsPerson)
+// router.put('/UpdateDetails/:id',ProCtrl.updateDetailsPerson)
 
 router.delete('/:id',verifyTokenAdministrador,verifyTokenEmail,ProCtrl.DeleteUser)
 router.put('/UpdateUser/:id',ModifyUserValidate,verifyTokenEmail,ProCtrl.ModifyUser)
