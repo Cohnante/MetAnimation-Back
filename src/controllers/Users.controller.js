@@ -206,39 +206,42 @@ async function SignUp(req,res,next){
 // Agregar detalle de Usuario 
 async function InsertDetailsUser(req, res, next) {
     try {
-        const { id } = req.params;
-        const { DescriptionPerson, Ocupation, telefono, Ubication, Facebook, Instagram, Youtube, Likes, Followers, Followed } = req.body;
-    
-        const searchIdConfirmed = `SELECT Id FROM Person WHERE Id = ${id}`;
-        conexion.query(searchIdConfirmed, (err, rows, fields) => {
-          if (err) throw err;
-          if (rows.length === 0) {
-            // El ID no existe, realizar inserción
-            const sqlInsert = `INSERT INTO DetailsPerson (IdPerson, DescriptionPerson, Ocupation, telefono, Ubication, Facebook, Instagram, Youtube, Likes, Followers, Followed) 
-                               VALUES ('${id}', '${DescriptionPerson}', '${Ocupation}', '${telefono}', '${Ubication}', '${Facebook}', '${Instagram}', '${Youtube}', '${Likes}', '${Followers}', '${Followed}')`;
-            conexion.query(sqlInsert, (err, rows, fields) => {
-              if (err) throw err;
-              else {
-                res.status(200).json({ Message: "Detalles Agregados" });
-              }
-            });
-          } else {
-            // El ID existe, realizar actualización
-            const sqlUpdate = `UPDATE DetailsPerson SET DescriptionPerson = '${DescriptionPerson}', Ocupation = '${Ocupation}', telefono = '${telefono}', 
-                               Ubication = '${Ubication}', Facebook = '${Facebook}', Instagram = '${Instagram}', Youtube = '${Youtube}', 
-                               Likes = '${Likes}', Followers = '${Followers}', Followed = '${Followed}' WHERE IdPerson = '${id}'`;
-            conexion.query(sqlUpdate, (err, rows, fields) => {
-              if (err) throw err;
-              else {
-                res.status(200).json({ Message: "Detalles Modificados" });
-              }
-            });
-          }
-        });
-      } catch (error) {
-        return res.status(500).json({ error });
-      }
+      const { id } = req.params;
+      const { DescriptionPerson, Ocupation, telefono, Ubication, Facebook, Instagram, Youtube, Likes, Followers, Followed } = req.body;
+  
+      // Verificar si existe un registro en la tabla DetailsPerson para el ID dado
+      const searchDetails = `SELECT IdPerson FROM DetailsPerson WHERE IdPerson = ${id}`;
+      conexion.query(searchDetails, (err, rows, fields) => {
+        if (err) throw err;
+  
+        if (rows.length === 0) {
+          // No existe un registro en la tabla DetailsPerson, realizar inserción
+          const sqlInsert = `INSERT INTO DetailsPerson (IdPerson, DescriptionPerson, Ocupation, telefono, Ubication, Facebook, Instagram, Youtube, Likes, Followers, Followed) 
+                             VALUES ('${id}', '${DescriptionPerson}', '${Ocupation}', '${telefono}', '${Ubication}', '${Facebook}', '${Instagram}', '${Youtube}', '${Likes}', '${Followers}', '${Followed}')`;
+          conexion.query(sqlInsert, (err, rows, fields) => {
+            if (err) throw err;
+            else {
+              res.status(200).json({ Message: "Detalles Agregados" });
+            }
+          });
+        } else {
+          // Existe un registro en la tabla DetailsPerson, realizar actualización
+          const sqlUpdate = `UPDATE DetailsPerson SET DescriptionPerson = '${DescriptionPerson}', Ocupation = '${Ocupation}', telefono = '${telefono}', 
+                             Ubication = '${Ubication}', Facebook = '${Facebook}', Instagram = '${Instagram}', Youtube = '${Youtube}', 
+                             Likes = '${Likes}', Followers = '${Followers}', Followed = '${Followed}' WHERE IdPerson = '${id}'`;
+          conexion.query(sqlUpdate, (err, rows, fields) => {
+            if (err) throw err;
+            else {
+              res.status(200).json({ Message: "Detalles Modificados" });
+            }
+          });
+        }
+      });
+    } catch (error) {
+      return res.status(500).json({ error });
     }
+  }
+  
 /*
 const updateDetailsPerson = (req,res)=>{
     try {
