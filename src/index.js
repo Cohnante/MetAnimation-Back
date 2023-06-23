@@ -28,6 +28,7 @@ app.use('/api/Course',require('./routes/Course.router'))
 app.use('/api/ContentCourse',require('./routes/ContentCourse.router'))
 app.use('/api/Category',require('./routes/Category.router'))
 app.use('/api/Teacher',require('./routes/teacher.router'))
+app.use('/api/Project',require('./routes/project.router'))
 app.use('/api/PodCast',require('./routes/podcast.router'))
 
 //Iniciar express
