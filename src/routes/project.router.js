@@ -1,7 +1,10 @@
-const router = require('express').Router();
+const Router = require('express').Router();
 const Project = require('../controllers/Project.controller')
 
 //aca van los metodos get,post,put,delete
-router.get('/',Project)
+Router.get('/',Project.GetAllProyecto)
 
-module.exports = router
+///////////PROYECTO/////////////////
+Router.get('/detils/:id',Project.GetdetailsProyecto)
+
+module.exports = Router

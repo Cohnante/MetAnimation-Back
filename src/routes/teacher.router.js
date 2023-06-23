@@ -13,8 +13,4 @@ Router.delete('/Delete/:id',UserAuth.verifyTokenEmail,TeacCtrl.DeleteTeacher)
 Router.put('/Update/Admin/:id',UserAuth.verifyTokenAdministrador,TeacherValidator.UpdateTeacher,TeacCtrl.UpdateTeacher)
 Router.delete('/Delete/Admin/:id',UserAuth.verifyTokenAdministrador,TeacCtrl.DeleteTeacher)
 
-
-///////////PROYECTO/////////////////
-Router.get('/detils/:id',TeacCtrl.GetdetailsProyecto)
-
 module.exports = Router
