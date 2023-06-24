@@ -22,7 +22,7 @@ const GetCourseElement = async(req,res)=>{
 
 const AddCourse=async(req,res)=>{
     try {
-      const NewCurso = new Cursos({
+    const NewCurso = new Cursos({
         Name:req.body.name,    
         Description:req.body.Description,
         Duration:req.body.Duration,
@@ -30,10 +30,32 @@ const AddCourse=async(req,res)=>{
         Lenguaje:req.body.Lenguaje,
         Category:req.body.Category,
         Details:[{
-          Name:req.body.Details.Name,
-          State:req.body.Details.State,
-          Url:req.body.Details.Url
+            Name:req.body.Details.Name,
+            State:req.body.Details.State,
+            Url:req.body.Details.Url
         }],
+        Module:[{
+            Name:req.body.Module.Name,
+            Clase:req.body.Module.Clase,
+            Url:req.body.module.Url
+        }],
+        Files:[{
+            Name:req.body.Files.Name,
+            State:req.body.Files.State,
+            URl:req.body.Files.URl
+        }],
+        ClasesContent:[{
+            Duration:req.body.ClasesContent.Duration,
+            Description:req.body.ClasesContent.Description,
+            Url:req.body.ClasesContent.Url,
+            Status:req.body.ClasesContent.Status
+        }],
+        Links:[{
+            Module:req.body.Links.Module,
+            Name:req.body.Links.Name,
+            State:req.body.Links.State,
+            Url:req.body.Links.Url
+        }]
     })
 
     const CursoSave = await NewCurso.save()
