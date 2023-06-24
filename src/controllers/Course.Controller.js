@@ -1,46 +1,67 @@
-const conexion = require('../config/mysql.config')
+const Cursos = require('../models/Course.model')
+require('dotenv').config()
 
 
-const GetCourseAll = (req,res) =>{
+const GetCourseAll = async(req,res) =>{
     try {
-        let sql = `call GetAllCourse();`
-        conexion.query(sql, (err, rows, fields) => {
-            if (err) throw err;
-            else {
-              res.json(rows[0]);
-            }
-          });
+        const CursosGetAll =await Cursos.find()
+        res.status(200).json(CursosGetAll)
     } catch (error) {
         return res.status(500).json({error});
     }
 }
 
-const GetCourseElement = (req,res)=>{
+const GetCourseElement = async(req,res)=>{
     try {
-        const {id} = req.params.id
-        let sql = `call GetCourseElement(?);`
-        conexion.query(sql,[id], (err, rows, fields) => {
-            if (err)
-              throw err;
-            else {
-              res.status(200).json(rows);
-            }
-          });
+        const CursosFound = await Cursos.findById(req.params.id)
+        return res.status(200).json(CursosFound)
     } catch (error) {
         return res.status(500).json({error});
     }
 }
 
-const AddCourse=(req,res)=>{
+const AddCourse=async(req,res)=>{
     try {
-        const {NameCourse,DescriptionCurso,Duration,IdTeacher,Lenguaje,Url,NameCategory} =req.body
-        let sql = `call CreateCourse('${NameCourse}','${DescriptionCurso}','${Duration}','${IdTeacher}','${Lenguaje}','${Url}','${NameCategory}')`
-        conexion.query(sql,(err,rows,fields)=>{
-          if(err) throw err
-          else{
-            return res.status(200).json({message:"Curso creado perfectamente"})
-          }
-        })
+    const NewCurso = new Cursos({
+        Name:req.body.name,    
+        Description:req.body.Description,
+        Duration:req.body.Duration,
+        IdTeacher:req.body.IdTeacher,
+        Lenguaje:req.body.Lenguaje,
+        Category:req.body.Category,
+        Details:[{
+            Name:req.body.Details.Name,
+            State:req.body.Details.State,
+            Url:req.body.Details.Url
+        }],
+        Module:[{
+            Name:req.body.Module.Name,
+            Clase:req.body.Module.Clase,
+            Url:req.body.module.Url
+        }],
+        Files:[{
+            Name:req.body.Files.Name,
+            State:req.body.Files.State,
+            URl:req.body.Files.URl
+        }],
+        ClasesContent:[{
+            Duration:req.body.ClasesContent.Duration,
+            Description:req.body.ClasesContent.Description,
+            Url:req.body.ClasesContent.Url,
+            Status:req.body.ClasesContent.Status
+        }],
+        Links:[{
+            Module:req.body.Links.Module,
+            Name:req.body.Links.Name,
+            State:req.body.Links.State,
+            Url:req.body.Links.Url
+        }]
+    })
+
+    const CursoSave = await NewCurso.save()
+
+    res.status(201).send(CursoSave)
+
     } catch (error) {
         return res.status(500).json({error});
     }
@@ -48,15 +69,7 @@ const AddCourse=(req,res)=>{
 
 const UpdateCourse=(req,res)=>{
   try {
-    const {id} = req.params
-    const {NameCourse,DescriptionCurso,Duration,IdTeacher,Lenguaje,Url,NameCategory} =req.body
-    let SearchCourseId=`select * from  AllCourse where Id=${id}`
-    conexion.query(SearchCourseId,(err,rows,fields)=>{
-      if(err)throw err;
-      else{
-        res.status(200).json(rows[0])
-      }
-    })
+    
   } catch (error) {
     
   }

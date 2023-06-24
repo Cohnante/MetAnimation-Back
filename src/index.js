@@ -1,5 +1,6 @@
 const morgan = require('morgan')
 const express = require('express');
+const db = require('./config/mongodb.config')
 const pool = require('./config/mysql.config')
 const cors = require('cors');
 require('dotenv').config()

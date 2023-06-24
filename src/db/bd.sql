@@ -56,14 +56,14 @@ CREATE TABLE Country (
 /*----------------------------Cursos-----------------------------------*/
 
 create table AllCourse(
- Id int primary key auto_increment,
- NameCourse varchar(255),
- DescriptionCourse char(255),
- durationCourse char(10),
- IdTeacher int,
- Lenguaje char(50),
- Url Varchar(200) not null,
- Categoria VARCHAR(255) not null
+    Id int primary key auto_increment,
+    NameCourse varchar(255),
+    DescriptionCourse char(255),
+    durationCourse char(10),
+    IdTeacher int,
+    Lenguaje char(50),
+    Url Varchar(200) not null,
+    Categoria VARCHAR(255) not null
 );
 
 CREATE TABLE Category (
@@ -75,17 +75,6 @@ CREATE TABLE Category (
     TotalCategoria int default 0,
     CONSTRAINT FK_Category_Course FOREIGN KEY (Id_Category)
         REFERENCES AllCourse(Id)
-);
-
-CREATE TABLE ContentCourseClass (
-    Id_Content INT PRIMARY KEY AUTO_INCREMENT,
-    IdDetailsCourses int NOT NULL,
-    Duration varchar(20) NOT NULL,
-    DescriptionClass varchar(50) not null,
-    Url varchar(50) not null,
-    Status BOOLEAN DEFAULT TRUE,
-    CONSTRAINT FK_Contentcourse_Course FOREIGN KEY (IdDetailsCourses)
-        REFERENCES detailsCourses(Id)
 );
 
 
@@ -102,7 +91,7 @@ CREATE TABLE Teacher (
 
 CREATE TABLE detailsCourses (
     Id INT PRIMARY KEY AUTO_INCREMENT,
-    IdCourse INT,
+    IdCourse INT AUTO_INCREMENT,
     NameCourses varchar(100),
     DescriptionCourses varchar(200),
     Duration varchar(45),
@@ -121,9 +110,21 @@ CREATE TABLE detailsCoursesFiles (
 	REFERENCES AllCourse(Id)
 );
 
+CREATE TABLE ContentCourseClass (
+    Id_Content INT PRIMARY KEY AUTO_INCREMENT,
+    IdDetailsCourses int NOT NULL,
+    Duration varchar(20) NOT NULL,
+    DescriptionClass varchar(50) not null,
+    Url varchar(50) not null,
+    Status BOOLEAN DEFAULT TRUE,
+    CONSTRAINT FK_Contentcourse_Course FOREIGN KEY (IdDetailsCourses)
+        REFERENCES detailsCourses(Id)
+);
+
 CREATE TABLE detailsCoursesLinks(
     Id INT PRIMARY KEY AUTO_INCREMENT,
     IdCourse INT,
+    Module VARCHAR(100),
     NameLink varchar(100),
     State int,
     UrlLink varchar(100),
@@ -210,6 +211,13 @@ CREATE TABLE Briefcase (
         REFERENCES Project (IdProject)
 );
 
+create table Modules(
+	id int primary key,
+    Name varchar(255) not null,
+    Description varchar(255) not null,
+    Url varchar(255) not null
+);
+
 CREATE TABLE Comment (
     IdComment INT PRIMARY KEY,
     IdBriefcase INT,
@@ -239,16 +247,6 @@ CREATE TABLE Membreys (
 
 insert into Type values (1,'Free'),(2,'Advanced'),(3,'Premium');
 
-
-
-delete from Person where id =  1095208133;
-
-
-delete from DetailsPerson where idPerson=  1095208133;
-
-select * from DetailsPerson;
-
-select * from Person;
 /*Calificacion Cursos*/
 
 CREATE TABLE qualification (
@@ -451,7 +449,8 @@ create procedure CreateCourse(in NameCourse varchar(255),in DescriptionCourse ch
 begin
 	SET FOREIGN_KEY_CHECKS=0;
     insert into AllCourse(NameCourse,DescriptionCourse,durationCourse,IdTeacher,Lenguaje,Url,Categoria) values (NameCourse,DescriptionCourse,durationCourse,IdTeacher,Lenguaje,Url,Categoria);
-	insert into ContentCourse(Description,Duration,Url,IdTeacher,Categoria) values (DescriptionCourse,durationCourse,Url,IdTeacher,Categoria);
+	insert into detailsCourses(NameCourses,DescriptionCourses,Duration,UrlVideo) values (NameCourse,DescriptionCourse,durationCourse,Url);
+    
     update Teacher set CursosTotales=CursosTotales+1 where Id_Teacher=IdTeacher;
     update Category set TotalCategoria=TotalCategoria+1 where NameCategory=NameCategory;
 end $$
@@ -462,19 +461,5 @@ create procedure CreateCategory(NameCat char(255),in DescriptionCate char(255))
 begin
 	SET FOREIGN_KEY_CHECKS=0;
 	insert into Category (NameCategory,DescriptionCategory) values (NameCat,DescriptionCate);
-end $$
-delimiter ;
-
-Delimiter $$
-create procedure GetAllDetailsCourse ()
-begin
-	select * from detailsCourses;
-end $$
-delimiter ;
-
-Delimiter $$
-create procedure GetIdDetailsCourse (in ID int)
-begin
-	select * from detailsCourses where detailsCourses.Id=ID;
 end $$
 delimiter ;
