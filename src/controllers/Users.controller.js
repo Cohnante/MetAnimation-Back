@@ -248,7 +248,7 @@ async function InsertToolsUser(req, res, next) {
       const { nameTools } = req.body;
   
       // Verificar si existe un registro en la tabla DetailsPerson para el ID dado
-      const searchDetails = `SELECT IdPerson FROM ToolsPerson WHERE IdPerson = ${id}`;
+
       conexion.query(searchDetails, (err, rows, fields) => {
         if (err) throw err;
   

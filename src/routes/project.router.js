@@ -1,17 +1,16 @@
 const Router = require('express').Router();
-const Project = require('../controllers/Project.controller')
+const Project = require('../controllers/Project.controller');
+const UserAuth=require('../middlewares/Users.auth')
 
-//aca van los metodos get,post,put,delete
-Router.get('/',Project.GetAllProyecto)
-Router.get('/artist',Project.GetAllArtist)
-
+Router.get('/', Project.GetAllProyecto);
+Router.get('/artist', Project.GetAllArtist);
 
 ///////////PROYECTO/////////////////
-Router.get('/detils/:id',Project.GetdetailsProyecto)
-Router.get('/allprject/:id',Project.GetAllProjectuser)
-Router.get('/:id',Project.GetProjeById)
-//router.post('/Insertproject/:id',verifyTokenEmail,Project.InsertProjectUser)
+Router.get('/details/:id', Project.GetdetailsProyecto);
+Router.get('/allproject/:id', Project.GetAllProjectuser);
+Router.get('/:id', Project.GetProjeById);
+Router.post('/Insertproject/:id',UserAuth.verifyTokenEmail, Project.InsertProjectUser);
+Router.post('/project/InsertRecourse/:projectId',UserAuth.verifyTokenEmail, Project.InserRecurseproject);
 
 
-
-module.exports = Router
+module.exports = Router;
