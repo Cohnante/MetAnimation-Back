@@ -4,9 +4,9 @@ function GetdetailsProyecto(req, res) {
   try {
     const id = req.params.id;
     let sql = 'CALL GetProjectDetailsByUserId(?)';
-    conexion.query(sql, [id], (err, results) => {
+    conexion.query(sql, [id], (err, rows) => {
       if (err) throw err;
-      if (results[0].length === 0) {
+      if (rows[0].length === 0) {
         res.status(404).json({ message: "Proyecto no encontrado" });
       } else {
         res.status(200).json(results[0]);
@@ -21,9 +21,9 @@ function GetAllProjectuser(req, res) {
   try {
     const id = req.params.id;
     let sql = 'CALL GetAllProjectsbyUser(?)';
-    conexion.query(sql, [id], (err, results) => {
+    conexion.query(sql, [id], (err, rows) => {
       if (err) throw err;
-      if (results[0].length === 0) {
+      if (rows[0].length === 0) {
         res.status(404).json({ message: "Proyecto no encontrado" });
       } else {
         res.status(200).json(results[0]);
@@ -66,12 +66,12 @@ function GetProjeById(req, res) {
   try {
     const id = req.params.id;
     let sql = 'CALL GetProjectById(?)';
-    conexion.query(sql, [id], (err, results) => {
+    conexion.query(sql, [id], (err, rows) => {
       if (err) throw err;
-      if (results[0].length === 0) {
+      if (rows[0].length === 0) {
         res.status(404).json({ message: "Proyecto no encontrado" });
       } else {
-        res.status(200).json(results[0]);
+        res.status(200).json(rows[0]);
       }
     });
   } catch (error) {
@@ -87,11 +87,11 @@ async function InsertProjectUser(req, res, next) {
     // Realizar la inserción del proyecto
     const sqlInsert = `INSERT INTO Project(NameProject, DescriptionProject, ImgProject, IdUsuario) 
                        VALUES ('${nombreProyecto}', '${descripcionPoyecto}', '${ImgProject}', ${id})`;
-    conexion.query(sqlInsert, (err, insertProjectResult, fields) => {
+    conexion.query(sqlInsert, (err, rows, fields) => {
       if (err) throw err;
 
       // Obtener el ID del proyecto insertado
-      const projectId = insertProjectResult.insertId;
+      const projectId = rows.insertId;
 
       // Realizar cualquier acción adicional necesaria
       // ...
@@ -109,7 +109,7 @@ async function InserRecurseproject(projectId, imageUrls) {
   imageUrls.forEach(imageUrl => {
     const sqlInsert = `INSERT INTO RecourseProject (IdProject, Url) 
                             VALUES (${projectId}, '${imageUrl}')`;
-    conexion.query(sqlInsert, (err, insertRecourseResult, fields) => {
+    conexion.query(sqlInsert, (err, rows, fields) => {
       if (err) throw err;
     });
   });
