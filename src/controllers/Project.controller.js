@@ -79,41 +79,45 @@ function GetProjeById(req, res) {
   }
 }
 
-async function InsertProjectUser(req, res, next) {
+const InsertProjectUser = (req, res) => {
   try {
-    const { id } = req.params;
-    const { nombreProyecto, descripcionPoyecto, ImgProject } = req.body;
+    let { id } = req.params;
+    let { DescripcionProyecto, NombreProyecto, Img1 } = req.body;
 
-    // Realizar la inserción del proyecto
-    const sqlInsert = `INSERT INTO Project(NameProject, DescriptionProject, ImgProject, IdUsuario) 
-                       VALUES ('${nombreProyecto}', '${descripcionPoyecto}', '${ImgProject}', ${id})`;
-    conexion.query(sqlInsert, (err, insertProjectResult, fields) => {
+    let sqlInsert = `INSERT INTO Project (NameProject, DescriptionProject, ImgProject, IdUsuario) VALUES ('${NombreProyecto}', '${DescripcionProyecto}', '${Img1}', '${id}')`;
+
+    conexion.query(sqlInsert, (err, result) => {
       if (err) throw err;
-
-      // Obtener el ID del proyecto insertado
-      const projectId = insertProjectResult.insertId;
-
-      // Realizar cualquier acción adicional necesaria
-      // ...
-
-      // Responder con éxito, incluyendo el ID del proyecto insertado
-      res.status(200).json({ Message: "Proyecto Agregado", IdProject: projectId });
+      else {
+        // Obtener el IdProject del registro insertado
+        let insertedId = result.insertDId;
+        res.status(200).json({ Message: "Proyecto Insertado", IdProject: insertedId });
+      }
     });
   } catch (error) {
     return res.status(500).json({ error });
   }
-}
+};
 
 
-async function InserRecurseproject(projectId, imageUrls) {
-  imageUrls.forEach(imageUrl => {
-    const sqlInsert = `INSERT INTO RecourseProject (IdProject, Url) 
-                            VALUES (${projectId}, '${imageUrl}')`;
-    conexion.query(sqlInsert, (err, insertRecourseResult, fields) => {
+const InserRecurseproject = (req, res) => {
+  try {
+    let { idProject, imgUrls } = req.body;
+
+    let sqlInsert = `INSERT INTO RecourseProject (IdProject, Url) VALUES ?`;
+
+    let values = imgUrls.map(url => [idProject, url]);
+
+    conexion.query(sqlInsert, [values], (err, result) => {
       if (err) throw err;
+      else {
+        res.status(200).json({ Message: "Recursos insertados" });
+      }
     });
-  });
-}
+  } catch (error) {
+    return res.status(500).json({ error });
+  }
+};
 
 module.exports = {
   GetdetailsProyecto,

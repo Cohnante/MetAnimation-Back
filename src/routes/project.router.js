@@ -10,7 +10,6 @@ Router.get('/details/:id', Project.GetdetailsProyecto);
 Router.get('/allproject/:id', Project.GetAllProjectuser);
 Router.get('/:id', Project.GetProjeById);
 Router.post('/Insertproject/:id',UserAuth.verifyTokenEmail, Project.InsertProjectUser);
-Router.post('/project/InsertRecourse/:projectId',UserAuth.verifyTokenEmail, Project.InserRecurseproject);
 
 
 module.exports = Router;

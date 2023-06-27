@@ -563,6 +563,7 @@ async function SignIn(req,res,next){
             return res.status(500).json({error})
     }
 };
+
 // Exportacion de las funciones
 module.exports = {
     Get,
@@ -574,7 +575,7 @@ module.exports = {
     InsertDetailsUser,
     DeleteUser,
     Getdetailsperosn,
-    InsertToolsUser,
+    InsertToolsUser
     
   //  updateDetailsPerson
 }
