@@ -30,12 +30,13 @@ const AddCourse = async(req,res)=>{
                 Duration:req.body.informacion.Duration,
                 IdTeacher:req.body.informacion.IdTeacher,
                 Lenguaje:req.body.informacion.Lenguaje,
-                Category:req.body.informacion.Category
-            },Details:[req.body.Details],
-            Modules:[req.body.Modules],
-            Files:[req.body.Files],
-            ClasesContent:[req.body.ClasesContent],
-            Links:[req.body.Links]
+                Category:req.body.informacion.Category,
+                Details:[req.body.Details],
+                Modules:[req.body.Modules],
+                Files:[req.body.Files],
+                ClasesContent:[req.body.ClasesContent],
+                Links:[req.body.Links]
+            }
         })
     
         const CursoSave = await NewCurso.save()
