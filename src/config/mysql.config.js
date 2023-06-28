@@ -13,7 +13,7 @@ var pool =  mysql.createPool({
 pool.on('connection', function (connection) {
     console.log('DB Connection established');
     connection.on('error', function (err) {
-    console.error(new Date(), 'MySQL error', err.code);
+    console.error(err);
     });
     connection.on('close', function (err) {
     console.error(new Date(), 'MySQL close', err);

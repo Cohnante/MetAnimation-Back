@@ -79,26 +79,29 @@ function GetProjeById(req, res) {
   }
 }
 
+
 const InsertProjectUser = (req, res) => {
   try {
     let { id } = req.params;
     let { DescripcionProyecto, NombreProyecto, Img1 } = req.body;
-
+  
     let sqlInsert = `INSERT INTO Project (NameProject, DescriptionProject, ImgProject, IdUsuario) VALUES ('${NombreProyecto}', '${DescripcionProyecto}', '${Img1}', '${id}')`;
 
     conexion.query(sqlInsert, (err, result) => {
-      if (err) throw err;
+      if (err) {
+        console.log(err)
+      }
       else {
         // Obtener el IdProject del registro insertado
-        let insertedId = result.insertDId;
-        res.status(200).json({ Message: "Proyecto Insertado", IdProject: insertedId });
+        let insertedId = result.insertId;
+        console.log(insertedId)
+        res.status(200).json({ Message: "Proyecto Insertado Correctamente", IdProject: insertedId });
       }
     });
   } catch (error) {
-    return res.status(500).json({ error });
+    return res.status(500).json({ error: "Hubo un problema cargando el proyecto"});
   }
 };
-
 
 const InserRecurseproject = (req, res) => {
   try {
@@ -110,14 +113,14 @@ const InserRecurseproject = (req, res) => {
 
     conexion.query(sqlInsert, [values], (err, result) => {
       if (err) throw err;
-      else {
-        res.status(200).json({ Message: "Recursos insertados" });
-      }
+      res.status(200).json({ Message: "Recursos insertados" });
     });
   } catch (error) {
     return res.status(500).json({ error });
   }
 };
+
+
 
 module.exports = {
   GetdetailsProyecto,

@@ -255,8 +255,8 @@ async function InsertToolsUser(req, res, next) {
         if (rows.length === 0) {
           // No existe un registro en la tabla DetailsPerson, realizar inserción
           const sqlInsert = `INSERT INTO ToolsPerson (IdPerson, nameTools) 
-          VALUES ('${id}', '${JSON.stringify(nameTools)}')`;
-          conexion.query(sqlInsert, (err, rows, fields) => {
+          VALUES ('${id}', ?)`;
+        conexion.query(sqlInsert, [nameTools], (err, rows, fields) => {
             if (err) throw err;
             else {
               res.status(200).json({ Message: "Tools Agregados" });
@@ -264,8 +264,8 @@ async function InsertToolsUser(req, res, next) {
           });
         } else {
           // Existe un registro en la tabla DetailsPerson, realizar actualización
-          const sqlUpdate = `UPDATE ToolsPerson SET nameTools = '${JSON.stringify(nameTools)}' WHERE IdPerson = '${id}'`;
-          conexion.query(sqlUpdate, (err, rows, fields) => {
+          const sqlUpdate = `UPDATE ToolsPerson SET nameTools = ? WHERE IdPerson = '${id}'`;
+          conexion.query(sqlUpdate, [nameTools], (err, rows, fields) => {
             if (err) throw err;
             else {
               res.status(200).json({ Message: "Tools Modificados" });

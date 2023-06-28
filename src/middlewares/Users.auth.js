@@ -12,9 +12,9 @@ const verifyTokenEmail = async (req,res,next)=>{
 
     const decode = Jwt.verify(token,process.env.SecretJWT)
 
-    let sql2 = `select Email from person where id = ${req.params.id}`
+    let sql2 = `select Email from Person where id = ${req.params.id}`
 
-    let sqlEmail = `select email from person where email = ?`
+    let sqlEmail = `select Email from Person where email = ?`
 
     let FoundEmail = conexion.query(sql2,[decode.email],(err,rows)=>{
 

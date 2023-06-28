@@ -1,85 +1,20 @@
-const {Schema,model} = require('mongoose')
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 const CourseSchema = new Schema({
-  Name:{
-    Type:String
-  },
-  Description:{
-    Type:String
-  },
-  Duration:{
-    Type:Number
-  },
-  IdTeacher:{
-    Type:Number
-  },
-  Lenguaje:{
-    Type:String
-  },
-  Category:{
-    Type:String
-  },
-  Details:[{
-    Name:{
-      Type:String
+    informacion:{
+      Name:Schema.Types.String,
+      Description:Schema.Types.String,
+      Duration:Schema.Types.Number,
+      IdTeacher:Schema.Types.Number,
+      Lenguaje:Schema.Types.String,
+      Category:Schema.Types.String
     },
-    State:{
-      type:Boolean
-    },
-    Url:{
-      type:String
-    }
-  }],
-  Modules:[{
-    Name:{
-      String
-    },
-    Clase:{
-      String
-    },
-    Url:{
-      Type:String
-    }
-  }],
-  Files:[{
-    Name:{
-      type:String
-    },
-    State:{
-      Type:Boolean
-    },
-    URl:{
-      type:String
-    }
-  }],
-  ClasesContent:[{
-    Duration:{
-      Type:Number
-    },
-    Description:{
-      Type:String
-    },
-    Url:{
-      Type:String
-    },
-    Status:{
-      type:Boolean
-    }
-  }],
-  Links:[{
-    Module:{
-      type:String
-    },
-    Name:{
-      Type:String
-    },
-    State:{
-      Type:Boolean
-    },
-    Url:{
-      Type:String
-    }
-  }]
+    Details:{type:Array},
+    Modules:{type:Array},
+    Files:{type:Array},
+    ClasesContent:{type:Array},
+    Links:{type:Array}
 })
 
-module.exports = model('Cursos',CourseSchema)
+module.exports= mongoose.model('Cursos',CourseSchema)

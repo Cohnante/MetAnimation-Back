@@ -5,8 +5,6 @@ const AuthCourse = require('../middlewares/course.auth')
 
 router.get('/',CourCrl.GetCourseAll)
 router.get('/:id',CourCrl.GetCourseElement)
-router.post('/add',ValidatorCourse.AddCourse,AuthCourse.verifyTokenEmailModifyCouser,CourCrl.AddCourse)
-router.put('/update/:id',CourCrl.UpdateCourse)
-
+router.post('/add',CourCrl.AddCourse)
 
 module.exports = router;
