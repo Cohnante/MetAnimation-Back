@@ -241,7 +241,7 @@ async function InsertDetailsUser(req, res, next) {
       return res.status(500).json({ error });
     }
 }
-// Agregar Herramientas Usuario
+// Agregar Herramientas Usuario vprueba
 async function InsertToolsUser(req, res, next) {
     try {
       const { id } = req.params;
@@ -259,7 +259,7 @@ async function InsertToolsUser(req, res, next) {
                     conexion.query(sqlInsert, (err, rows, fields) => {
             if (err) throw err;
             else {
-              res.status(200).json({ Message: "Herramientas agregadas correctamente" });
+              res.status(200).json({ Message: "registro agregados correctamente" });
             }
           });
         } else {
@@ -268,7 +268,7 @@ async function InsertToolsUser(req, res, next) {
           conexion.query(sqlUpdate, [nameToolsJSON], (err, rows, fields) => {
             if (err) throw err;
             else {
-              res.status(200).json({ Message: "Herramientas modificadas correctamente" });
+              res.status(200).json({ Message: "Registro modificado correctamente" });
             }
           });
         }
