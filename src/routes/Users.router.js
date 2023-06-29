@@ -12,7 +12,7 @@ router.get('/details/:id', ProCtrl.Getdetailsperosn);
 router.delete('/:id',verifyTokenAdministrador,verifyTokenEmail,ProCtrl.DeleteUser)
 router.put('/UpdateUser/:id',ModifyUserValidate,verifyTokenEmail,ProCtrl.ModifyUser)
 router.post('/InsertDetails/:id',verifyTokenEmail,ProCtrl.InsertDetailsUser)
-router.post('/InsertTools/:id',verifyTokenEmail,ProCtrl.InsertToolsUser)
+router.post('/InsertTools/:id',ProCtrl.InsertToolsUser)
 router.put('/UpdateUser/Admin/:id',ModifyUserValidate,verifyTokenAdministrador,ProCtrl.ModifyUser)
 router.put('/UpdatePassword/:id',ModifyPasswordValidate,verifyTokenPassword,ProCtrl.ModifyPassword)
 router.post('/SignUp',SignUpValidate,ProCtrl.SignUp)

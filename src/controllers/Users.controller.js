@@ -245,38 +245,41 @@ async function InsertDetailsUser(req, res, next) {
 async function InsertToolsUser(req, res, next) {
     try {
       const { id } = req.params;
-      const { nameTools } = req.body;
+      const {nameTools} = req.body
+      const nameToolsJSON = JSON.stringify(nameTools);
   
-      // Verificar si existe un registro en la tabla DetailsPerson para el ID dado
-
+      // Verificar si existe un registro en la tabla tools para el ID dado
+      const searchDetails = `SELECT IdPerson FROM ToolsPerson WHERE IdPerson = ${id}`;
       conexion.query(searchDetails, (err, rows, fields) => {
         if (err) throw err;
   
         if (rows.length === 0) {
           // No existe un registro en la tabla DetailsPerson, realizar inserción
-          const sqlInsert = `INSERT INTO ToolsPerson (IdPerson, nameTools) 
-          VALUES ('${id}', ?)`;
-        conexion.query(sqlInsert, [nameTools], (err, rows, fields) => {
+          const sqlInsert = `INSERT INTO ToolsPerson (IdPerson, nameTools) VALUES ('${id}', '${nameToolsJSON}')`;
+                    conexion.query(sqlInsert, (err, rows, fields) => {
             if (err) throw err;
             else {
-              res.status(200).json({ Message: "Tools Agregados" });
+              res.status(200).json({ Message: "Herramientas agregadas correctamente" });
             }
           });
         } else {
           // Existe un registro en la tabla DetailsPerson, realizar actualización
-          const sqlUpdate = `UPDATE ToolsPerson SET nameTools = ? WHERE IdPerson = '${id}'`;
-          conexion.query(sqlUpdate, [nameTools], (err, rows, fields) => {
+          const sqlUpdate = `UPDATE ToolsPerson SET nameTools = '${nameToolsJSON}' WHERE IdPerson = '${id}'`;
+          conexion.query(sqlUpdate, [nameToolsJSON], (err, rows, fields) => {
             if (err) throw err;
             else {
-              res.status(200).json({ Message: "Tools Modificados" });
+              res.status(200).json({ Message: "Herramientas modificadas correctamente" });
             }
           });
         }
       });
     } catch (error) {
+      console.error(error); // Agrega esta línea para imprimir el error en la consola
       return res.status(500).json({ error });
     }
-}
+  }
+  
+  
   
 /*
 const updateDetailsPerson = (req,res)=>{
