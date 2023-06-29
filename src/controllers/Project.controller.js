@@ -113,7 +113,7 @@ const InserRecurseproject = (req, res) => {
 
     conexion.query(sqlInsert, [values], (err, result) => {
       if (err) throw err;
-      res.status(200).json({ Message: "Recursos insertados" });
+      res.status(200).json({ Message: "Recursos del proyecto insertados" });
     });
   } catch (error) {
     return res.status(500).json({ error });

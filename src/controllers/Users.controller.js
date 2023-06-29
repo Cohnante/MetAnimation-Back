@@ -259,7 +259,7 @@ async function InsertToolsUser(req, res, next) {
                     conexion.query(sqlInsert, (err, rows, fields) => {
             if (err) throw err;
             else {
-              res.status(200).json({ Message: "registro agregados correctamente" });
+              res.status(200).json({ Message: "Herramientas agregadas correctamente" });
             }
           });
         } else {
@@ -268,7 +268,7 @@ async function InsertToolsUser(req, res, next) {
           conexion.query(sqlUpdate, [nameToolsJSON], (err, rows, fields) => {
             if (err) throw err;
             else {
-              res.status(200).json({ Message: "Registro modificado correctamente" });
+              res.status(200).json({ Message: "Herramientas modificadas correctamente" });
             }
           });
         }
