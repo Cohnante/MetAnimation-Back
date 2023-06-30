@@ -16,7 +16,6 @@ router.post('/InsertTools/:id',ProCtrl.InsertToolsUser)
 router.put('/UpdateUser/Admin/:id',ModifyUserValidate,verifyTokenAdministrador,ProCtrl.ModifyUser)
 router.put('/UpdatePassword/:id',ModifyPasswordValidate,verifyTokenPassword,ProCtrl.ModifyPassword)
 router.post('/SignUp',SignUpValidate,ProCtrl.SignUp)
-router.post('/SignUp:',SignUpValidate,ProCtrl.SignUp)
 router.post('/SignIn',SigninValidate,ProCtrl.SignIn)
 
 
